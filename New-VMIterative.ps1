@@ -11,6 +11,8 @@ function New-VMIterative
                 if($([string]$startInt).length -eq $([string]$endInt).length){
                                 while($num -le $endInt){
                                                 $vmnamefinal = $vmNameBase + $num
+                                                $writehostteext = "Creating new VM - " + $vmnamefinal
+                                                Write-Host $writehosttext
                                                 New-VM -VM $vmVar -VMHost $vmHost -Datastore $datastore -Name $vmnamefinal
                                                 $num += 1
                                 }
@@ -20,6 +22,8 @@ function New-VMIterative
                                 while($num -lt $endInt){
                                                 while($([string]$num).length -eq $len -and $num -lt $endInt){
                                                                 $vmnamefinal = $vmNameBase + $num
+                                                                $writehostteext = "Creating new VM - " + $vmnamefinal
+                                                                Write-Host $writehosttext
                                                                 New-VM -VM $vmVar -VMHost $vmHost -Datastore $datastore -Name $vmnamefinal
                                                                 $num += 1
                                                 }
