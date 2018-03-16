@@ -16,7 +16,7 @@ function Update-Blueprint{
 		[String]
 		$username,
 		[parameter(Mandatory=$true)]
-		[String]
+		[SecureString]
 		$password,
 		[parameter(Mandatory=$true)]
 		[String]
@@ -35,7 +35,7 @@ function Update-Blueprint{
 	## Create object with log in info
 	$tokenreqbody = @{
 		username=$username
-		password=$password
+		password=(ConvertFrom-SecureString $password)
 		tenant=$tenant
 	}
 	## Convert object to JSON doc
@@ -60,14 +60,14 @@ function Update-Blueprint{
 			$vmname
 			
 			## Convert text to variables
-			$cpudata = Select-String -InputObject $vm.$env -Pattern "[0-9]* CPU"  | Select Matches
-			$memdata = Select-String -InputObject $vm.$env -Pattern "[0-9]*GB RAM"  | Select Matches
-			$clusterdata = Select-String -InputObject $vm.$env -Pattern "[0-9]* VM"  | Select Matches
+			$cpudata = Select-String -InputObject $vm.$env -Pattern "[0-9]* CPU"  | Select-Object Matches
+			$memdata = Select-String -InputObject $vm.$env -Pattern "[0-9]*GB RAM"  | Select-Object Matches
+			$clusterdata = Select-String -InputObject $vm.$env -Pattern "[0-9]* VM"  | Select-Object Matches
 			
 			## Parse new variables into number strings only
-			$cpudata = Select-String -InputObject $cpudata.Matches.Value -Pattern "[0-9]*"  | Select Matches
-			$memdata = Select-String -InputObject $memdata.Matches.Value -Pattern "[0-9]*"  | Select Matches
-			$clusterdata = Select-String -InputObject $clusterdata.Matches.Value -Pattern "[0-9]*"  | Select Matches
+			$cpudata = Select-String -InputObject $cpudata.Matches.Value -Pattern "[0-9]*"  | Select-Object Matches
+			$memdata = Select-String -InputObject $memdata.Matches.Value -Pattern "[0-9]*"  | Select-Object Matches
+			$clusterdata = Select-String -InputObject $clusterdata.Matches.Value -Pattern "[0-9]*"  | Select-Object Matches
 			
 			## Convert number strings to ints
 			[int]$intcpu = [convert]::ToInt32($cpudata.Matches.Value, 10)

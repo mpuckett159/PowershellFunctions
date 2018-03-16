@@ -18,7 +18,7 @@ function Get-vRABearer {
 		[String]
 		$username,
 		[parameter(Mandatory=$true)]
-		[String]
+		[SecureString]
 		$password,
 		[parameter(Mandatory=$true)]
 		[String]
@@ -35,7 +35,7 @@ function Get-vRABearer {
 	## Create object with log in info
 	$tokenreqbody = @{
 		username=$username
-		password=$password
+		password=(ConvertFrom-SecureString $password)
 		tenant=$tenant
 	}
 	## Convert PS object to JSON

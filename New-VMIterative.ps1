@@ -7,7 +7,6 @@ function New-VMIterative
                 $vmHost = Get-VM -Name $sourceVM | Get-VMHost
                 $datastore = Get-VM -Name $sourceVM | Get-Datastore
                 $num = $startInt
-                $diff = $endInt - $startInt
                 if($([string]$startInt).length -eq $([string]$endInt).length){
                                 while($num -le $endInt){
                                                 $vmnamefinal = $vmNameBase + $num
