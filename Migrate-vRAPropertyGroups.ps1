@@ -17,16 +17,22 @@ function Migrate-vRAPropertyGroups {
 		[String]
 		$vrauriold,
 		[parameter(Mandatory=$true)]
-		[String]
-		$vraurinew,
-		[parameter(Mandatory=$true)]
 		[Collections.IDictionary]
 		$headersold,
 		[parameter(Mandatory=$true)]
 		[Collections.IDictionary]
 		$headersnew,
+		[parameter]
+		[String]
+		$vraurinew,
 		[Object[]]
-		$prop_groups_obj
+		$prop_groups_obj,
+		[parameter]
+		[String]
+		$out_file,
+		[parameter]
+		[Boolean]
+		$store_values
 	)
 	
 	## Retrieve Property Groups from source environment if object not already provided
@@ -42,8 +48,12 @@ function Migrate-vRAPropertyGroups {
 	}
 	
 	## Sync Property Groups to target environment
-#	foreach($prop_group in $prop_groups_obj.content){
-#		Invoke-RestMethod -Uri "$($vraurinew)/properties-service/api/propertygroups" -Method POST -Headers $headersnew -Body (ConvertTo-Json -Depth 100 -InputObject $prop_group) 
-#	}	
-	$prop_groups_obj.content[0]
+	if($store_values){
+		foreach($prop_group in $prop_groups_obj.content){
+			Invoke-RestMethod -Uri "$($vraurinew)/properties-service/api/propertygroups" -Method POST -Headers $headersnew -Body (ConvertTo-Json -Depth 100 -InputObject $prop_group) 
+		}
+	}
+	else{
+		$prop_groups_obj.content[0] | Out-File -FilePath $out_file
+	}
 }
